@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Notes</string>
+    <string name="body_TextView">Я Kotlin бы выучил только за то, что на нем разрабатывал Вортон!</string>
+    <string name="title_TextView">Geekbrains + Kotlin forever</string>
+    <string name="toolbar_notes">Notes</string>
 </resources>
