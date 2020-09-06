@@ -10,9 +10,8 @@ import mas.com.notes.ui.note.NoteActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private var viewModel: MainViewModel =
-        ViewModelProviders.of(this).get(MainViewModel::class.java)
     lateinit var adapter: MainAdapter
+    lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -26,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         mainRecycler.adapter = adapter
 
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.viewState().observe(this, Observer { state ->
             state?.let { state ->
                 adapter.notes = state.notes
