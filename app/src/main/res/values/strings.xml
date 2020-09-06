@@ -3,4 +3,7 @@
     <string name="body_TextView">Я Kotlin бы выучил только за то, что на нем разрабатывал Вортон!</string>
     <string name="title_TextView">Geekbrains + Kotlin forever</string>
     <string name="toolbar_notes">Notes</string>
+    <string name="new_note_title">Новая заметка</string>
+    <string name="title">Заголовок</string>
+    <string name="body">Текст заметки</string>
 </resources>
