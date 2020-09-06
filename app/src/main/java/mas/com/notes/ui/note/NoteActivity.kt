@@ -31,8 +31,7 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private var note: Note? = null
-    private var viewModel: NoteViewModel =
-        ViewModelProviders.of(this).get(NoteViewModel::class.java)
+    lateinit var viewModel: NoteViewModel
 
 
     private val textChangeListener = object : TextWatcher {
@@ -47,16 +46,14 @@ class NoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note)
-
+        viewModel = ViewModelProviders.of(this).get(NoteViewModel::class.java)
         note = intent.getParcelableExtra(EXTRA_NOTE)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = note?.let { note ->
             SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(note.lastChanged)
-        } ?: let {
-            getString(R.string.new_note_title)
-        }
+        } ?: getString(R.string.new_note_title)
 
         initView()
     }
