@@ -1,41 +1,41 @@
 package mas.com.notes.ui.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import mas.com.notes.R
+import mas.com.notes.data.model.Note
+import mas.com.notes.ui.base.BaseActivity
+import mas.com.notes.ui.base.BaseViewModel
 import mas.com.notes.ui.note.NoteActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
+
+    override val viewModel: BaseViewModel<List<Note>?, MainViewState> by lazy {
+        ViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
+    override val layoutRes = R.layout.activity_main
 
     lateinit var adapter: MainAdapter
-    lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        adapter = MainAdapter {
-            NoteActivity.start(this, it)
+        //mainRecycler.layoutManager = GridLayoutManager(this, 2)
+        adapter = MainAdapter { note ->
+            NoteActivity.start(this, note.id)
         }
-
         mainRecycler.adapter = adapter
-
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.viewState().observe(this, Observer { state ->
-            state?.let { state ->
-                adapter.notes = state.notes
-            }
-        })
-
         fab.setOnClickListener {
             NoteActivity.start(this)
         }
+    }
 
+    override fun renderData(data: List<Note>?) {
+        data?.let {
+            adapter.notes = it
+        }
     }
 
 }
