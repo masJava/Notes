@@ -40,7 +40,8 @@
         android:src="@drawable/ic_add_24dp"
         app:fabSize="normal"
         app:layout_anchor="@id/mainRecycler"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end"
+        app:layout_behavior=".ui.common.FabBehavior"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,4 +6,8 @@
     <string name="new_note_title">Новая заметка</string>
     <string name="title">Заголовок</string>
     <string name="body">Текст заметки</string>
+    <string name="logout_title">Выход</string>
+    <string name="logout_message">Точно выйти?</string>
+    <string name="logout_ok">Yes</string>
+    <string name="logout_cancel">No</string>
 </resources>

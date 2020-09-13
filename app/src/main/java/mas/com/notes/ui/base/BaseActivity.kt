@@ -1,30 +1,73 @@
 package mas.com.notes.ui.base
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.firebase.ui.auth.AuthUI
+import kotlinx.android.synthetic.main.activity_main.*
+import mas.com.notes.R
+import mas.com.notes.data.errors.NoAuthException
 
 abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
 
+    companion object {
+        const val RC_SIGN_IN = 4242
+    }
+
     abstract val viewModel: BaseViewModel<T, S>
-    abstract val layoutRes: Int
+    abstract val layoutRes: Int?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutRes)
-        viewModel.getViewState().observe(this, object : Observer<S> {
-            override fun onChanged(t: S?) {
-                if (t == null) return
-                if (t.data != null) renderData(t.data)
-                if (t.error != null) renderError(t.error)
+        layoutRes?.let {
+            setContentView(it)
+        }
+
+        setSupportActionBar(toolbar)
+        viewModel.getViewState().observe(this, Observer { state ->
+            state ?: return@Observer
+            state.error?.let { e ->
+                renderError(e)
+                return@Observer
             }
+            renderData(state.data)
         })
     }
 
     protected fun renderError(error: Throwable?) {
-        error?.message?.let { message -> showError(message) }
-//        if (error?.message != null) showError(error.message!!)
+        when(error){
+            is NoAuthException -> startLogin()
+            else ->  error?.message?.let { message ->
+                showError(message)
+            }
+        }
+    }
+
+    private fun startLogin(){
+        val providers = listOf(
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+
+        val intent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setLogo(R.drawable.android_robot)
+            .setTheme(R.style.LoginTheme)
+            .setAvailableProviders(providers)
+            .build()
+
+        startActivityForResult(intent, RC_SIGN_IN)
+
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == RC_SIGN_IN && resultCode != Activity.RESULT_OK){
+            finish()
+        }
     }
 
     abstract fun renderData(data: T)

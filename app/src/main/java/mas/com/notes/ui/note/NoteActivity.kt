@@ -10,8 +10,8 @@ import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_note.*
 import mas.com.notes.R
-import mas.com.notes.data.model.Color
-import mas.com.notes.data.model.Note
+import mas.com.notes.data.entity.Note
+import mas.com.notes.data.entity.Note.Color
 import mas.com.notes.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,9 +65,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
             viewModel.loadNote(id)
         } ?: let {
             supportActionBar?.title = getString(R.string.new_note_title)
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                toolbar.setBackgroundColor(getColor(convertColor(newColor)))
-            }
+            toolbar.setBackgroundColor(getColor(convertColor(newColor)))
         }
         initView()
     }
@@ -100,9 +98,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
             bodyEt.setText(note.textNote)
 
             val color = convertColor(note.color)
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                toolbar.setBackgroundColor(getColor(color))
-            }
+            toolbar.setBackgroundColor(getColor(color))
         }
 
         titleEt.addTextChangedListener(textChangeListener)
@@ -147,9 +143,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
 
     fun colorChange(item: MenuItem) {
         newColor = getNextColor(colorList)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            toolbar.setBackgroundColor(getColor(convertColor(newColor)))
-        }
+        toolbar.setBackgroundColor(getColor(convertColor(newColor)))
         saveNote()
     }
 
