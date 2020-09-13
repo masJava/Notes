@@ -1,8 +1,9 @@
-package mas.com.notes.data.model
+package mas.com.notes.data.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.util.*
+
 
 @Parcelize
 data class Note(
@@ -10,8 +11,8 @@ data class Note(
     val title: String = "",
     val textNote: String = "",
     val color: Color = Color.WHITE,
-    val lastChanged: Date = Date(),
-) : Parcelable {
+    val lastChanged: Date = Date()
+): Parcelable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -21,14 +22,6 @@ data class Note(
         if (id != other.id) return false
         return true
     }
-}
 
-enum class Color {
-    WHITE,
-    YELLOW,
-    GREEN,
-    BLUE,
-    RED,
-    VIOLET,
-    PINK
+    enum class Color { WHITE, YELLOW, GREEN, PINK, BLUE, RED, VIOLET }
 }

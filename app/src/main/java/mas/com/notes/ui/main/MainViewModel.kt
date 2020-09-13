@@ -2,7 +2,7 @@ package mas.com.notes.ui.main
 
 import androidx.lifecycle.Observer
 import mas.com.notes.data.Repository
-import mas.com.notes.data.model.Note
+import mas.com.notes.data.entity.Note
 import mas.com.notes.data.model.NoteResult
 import mas.com.notes.ui.base.BaseViewModel
 

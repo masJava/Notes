@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_note.view.*
 import mas.com.notes.R
-import mas.com.notes.data.model.Color
-import mas.com.notes.data.model.Note
+import mas.com.notes.data.entity.Note
+import mas.com.notes.data.entity.Note.Color
 
 class MainAdapter(val onItemClick: ((Note) -> Unit)? = null) :
     RecyclerView.Adapter<MainAdapter.NoteViewHolder>() {

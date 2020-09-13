@@ -1,6 +1,6 @@
 package mas.com.notes.ui.main
 
-import mas.com.notes.data.model.Note
+import mas.com.notes.data.entity.Note
 import mas.com.notes.ui.base.BaseViewState
 
 
