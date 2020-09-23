@@ -4,10 +4,10 @@ import mas.com.notes.data.Repository
 import mas.com.notes.data.errors.NoAuthException
 import mas.com.notes.ui.base.BaseViewModel
 
-class SplashViewModel : BaseViewModel<Boolean?, SplashViewState>() {
+class SplashViewModel(val repository: Repository) : BaseViewModel<Boolean?, SplashViewState>() {
 
     fun requestUser() {
-        Repository.getCurrentUser().observeForever {
+        repository.getCurrentUser().observeForever {
             viewStateLiveData.value = it?.let {
                 SplashViewState(authenticated = true)
             } ?: let {

@@ -13,8 +13,27 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            app:subtitleTextColor="@android:color/black"
+            app:titleTextColor="@android:color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimaryDark"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <mas.com.notes.ui.customview.ColorPickerView
+                android:id="@+id/colorPicker"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+        </HorizontalScrollView>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 

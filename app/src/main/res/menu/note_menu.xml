@@ -4,8 +4,12 @@
     <item
         android:id="@+id/colorChange"
         android:icon="@drawable/ic_baseline_color_lens_24"
-        android:onClick="colorChange"
         android:title="Color"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/deleteNote"
+        android:icon="@drawable/ic_baseline_delete_forever_24"
+        android:title="Delete"
         app:showAsAction="ifRoom" />
 
 </menu>

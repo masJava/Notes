@@ -1,6 +1,5 @@
 package mas.com.notes.ui.base
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -63,8 +62,8 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
 
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == RC_SIGN_IN && resultCode != Activity.RESULT_OK){
             finish()
         }
