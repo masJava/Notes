@@ -12,6 +12,9 @@
     <color name="color_violet">#e1bee7</color>
     <color name="color_pink">#f8bbd0</color>
 
+
+    <color name="text_secondary">#66000000</color>
+
     <color name="color1">#fff06292</color>
     <color name="color2">#ff9575cd</color>
     <color name="color3">#ff64b5f6</color>

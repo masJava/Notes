@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_note.view.*
 import mas.com.notes.R
 import mas.com.notes.data.entity.Note
@@ -33,7 +34,7 @@ class MainAdapter(val onItemClick: ((Note) -> Unit)? = null) :
 
     override fun onBindViewHolder(vh: NoteViewHolder, pos: Int) = vh.bind(notes[pos])
 
-    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class NoteViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(note: Note) = with(itemView) {
             titleTextView.text = note.title
@@ -48,7 +49,7 @@ class MainAdapter(val onItemClick: ((Note) -> Unit)? = null) :
                 Color.BLUE -> R.color.color_blue
             }
 
-            (itemView as CardView).setCardBackgroundColor(getColor(context, color))
+            (itemView as CardView).setCardBackgroundColor(getColor(containerView.context, color))
             itemView.setOnClickListener { onItemClick?.invoke(note) }
         }
     }

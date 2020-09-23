@@ -1,5 +1,6 @@
 package mas.com.notes.ui.note
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,17 +8,17 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_note.*
 import mas.com.notes.R
 import mas.com.notes.data.entity.Note
 import mas.com.notes.data.entity.Note.Color
 import mas.com.notes.ui.base.BaseActivity
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
-class NoteActivity : BaseActivity<Note?, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     companion object {
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
@@ -38,10 +39,8 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     private val colorList =
         listOf(Color.VIOLET, Color.YELLOW, Color.RED, Color.PINK, Color.GREEN, Color.BLUE)
 
-    private var newColor = getRandColor(colorList)
-    override val viewModel: NoteViewModel by lazy {
-        ViewModelProviders.of(this).get(NoteViewModel::class.java)
-    }
+    private var colorNote = getRandColor(colorList)
+    override val viewModel: NoteViewModel by viewModel()
     override val layoutRes = R.layout.activity_note
 
 
@@ -65,7 +64,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
             viewModel.loadNote(id)
         } ?: let {
             supportActionBar?.title = getString(R.string.new_note_title)
-            toolbar.setBackgroundColor(getColor(convertColor(newColor)))
+            toolbar.setBackgroundColor(getColor(convertColor(colorNote)))
         }
         initView()
     }
@@ -79,13 +78,9 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
         return colorList[Random.nextInt(colorList.size)]
     }
 
-    override fun renderData(data: Note?) {
-        this.note = data
-        supportActionBar?.title = note?.let { note ->
-            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(note.lastChanged)
-        } ?: let {
-            getString(R.string.new_note_title)
-        }
+    override fun renderData(data: NoteViewState.Data) {
+        if(data.isDeleted) finish()
+        this.note = data.note
         initView()
     }
 
@@ -96,14 +91,40 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
         note?.let { note ->
             titleEt.setText(note.title)
             bodyEt.setText(note.textNote)
-
-            val color = convertColor(note.color)
-            toolbar.setBackgroundColor(getColor(color))
+            titleEt.setSelection(titleEt.text?.length ?: 0)
+            bodyEt.setSelection(bodyEt.text?.length ?: 0)
+            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(note.lastChanged)
+            colorNote = note.color
+            toolbar.setBackgroundColor(getColor(convertColor(colorNote)))
+        }?: let {
+            supportActionBar?.title = getString(R.string.new_note_title)
         }
 
         titleEt.addTextChangedListener(textChangeListener)
         bodyEt.addTextChangedListener(textChangeListener)
 
+        colorPicker.onColorClickListener = {
+            colorNote = it
+            toolbar.setBackgroundColor(convertColor(colorNote))
+            saveNote()
+        }
+
+    }
+
+    override fun onBackPressed() {
+        if (colorPicker.isOpen) {
+            colorPicker.close()
+            return
+        }
+        super.onBackPressed()
+    }
+
+    fun togglePallete() {
+        if (colorPicker.isOpen) {
+            colorPicker.close()
+        } else {
+            colorPicker.open()
+        }
     }
 
     private fun convertColor(col: Color): Int {
@@ -125,7 +146,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
             title = titleEt.text.toString(),
             textNote = bodyEt.text.toString(),
             lastChanged = Date(),
-            color = newColor
+            color = colorNote
         ) ?: Note(UUID.randomUUID().toString(), titleEt.text.toString(), bodyEt.text.toString())
 
         note?.let {
@@ -134,26 +155,35 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-            onBackPressed()
-            true
-        }
+        android.R.id.home -> onBackPressed().let { true }
+        R.id.deleteNote -> deleteNote().let { true }
+        R.id.colorChange -> togglePallete().let { true }
         else -> super.onOptionsItemSelected(item)
     }
 
-    fun colorChange(item: MenuItem) {
-        newColor = getNextColor(colorList)
-        toolbar.setBackgroundColor(getColor(convertColor(newColor)))
-        saveNote()
-    }
+//    fun colorChange(item: MenuItem) {
+//        colorNote = getNextColor(colorList)
+//        toolbar.setBackgroundColor(getColor(convertColor(colorNote)))
+//        saveNote()
+//    }
 
     private fun getNextColor(colorList: List<Color>): Color {
         for (i in colorList.indices) {
-            if (newColor == colorList[i]) {
+            if (colorNote == colorList[i]) {
                 if (i != colorList.lastIndex)
                     return colorList[i + 1]
             }
         }
         return colorList[0]
+    }
+
+    private fun deleteNote() {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.note_del_message))
+            .setPositiveButton(R.string.note_del_ok) { dialog, which ->
+                viewModel.deleteNote()
+                onBackPressed() }
+            .setNegativeButton(R.string.note_del_cancel) { dialog, which -> dialog.dismiss() }
+            .show()
     }
 }

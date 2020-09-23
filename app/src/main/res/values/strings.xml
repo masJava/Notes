@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Notes</string>
-    <string name="body_TextView">Я Kotlin бы выучил только за то, что на нем разрабатывал Вортон!</string>
-    <string name="title_TextView">Geekbrains + Kotlin forever</string>
     <string name="toolbar_notes">Notes</string>
     <string name="new_note_title">Новая заметка</string>
     <string name="title">Заголовок</string>
@@ -10,4 +8,8 @@
     <string name="logout_message">Точно выйти?</string>
     <string name="logout_ok">Yes</string>
     <string name="logout_cancel">No</string>
+    <string name="note_del_message">Точно удалить?</string>
+    <string name="note_del_ok">Yes</string>
+    <string name="note_del_cancel">No</string>
+
 </resources>

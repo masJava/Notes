@@ -10,16 +10,13 @@ import mas.com.notes.data.errors.NoAuthException
 import mas.com.notes.data.model.NoteResult
 
 
-class FireStoreProvider : RemoteDataProvider {
+class FireStoreProvider(val store: FirebaseFirestore, val auth: FirebaseAuth) : RemoteDataProvider {
 
     companion object {
         private const val NOTES_COLLECTION = "notes"
         private const val USER_COLLECTION = "users"
 
     }
-
-    private val store by lazy { FirebaseFirestore.getInstance() }
-    private val auth by lazy { FirebaseAuth.getInstance() }
 
     private val currentUser
         get() = auth.currentUser
@@ -63,4 +60,15 @@ class FireStoreProvider : RemoteDataProvider {
                 value = NoteResult.Error(it)
             }
     }
+
+    override fun deleteNote(noteId: String):  LiveData<NoteResult> = MutableLiveData<NoteResult>().apply {
+        userNotesCollection.document(noteId).delete()
+            .addOnSuccessListener { snapshot ->
+                value = NoteResult.Success(null)
+            }.addOnFailureListener {
+                value = NoteResult.Error(it)
+            }
+    }
+
+
 }
