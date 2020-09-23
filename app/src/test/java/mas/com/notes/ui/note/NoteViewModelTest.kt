@@ -13,7 +13,6 @@ import mas.com.notes.data.model.NoteResult
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.verify
 
 
 class NoteViewModelTest {
