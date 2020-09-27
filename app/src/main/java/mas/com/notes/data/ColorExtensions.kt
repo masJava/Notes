@@ -18,5 +18,5 @@ fun Note.Color.getColorRes(): Int = when (this) {
     Note.Color.RED -> R.color.color_red
     Note.Color.GREEN -> R.color.color_green
     Note.Color.BLUE -> R.color.color_blue
-    else -> R.color.color_white
+    Note.Color.PINK -> R.color.color_pink
 }

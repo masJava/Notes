@@ -13,9 +13,11 @@ import androidx.core.content.ContextCompat
 import mas.com.notes.R
 
 
-class ColorCircleView @JvmOverloads constructor(context: Context,
-                                                attrs: AttributeSet? = null,
-                                                defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+class ColorCircleView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     companion object {
         @Dimension(unit = DP) private const val defRadiusDp = 16
@@ -63,7 +65,10 @@ class ColorCircleView @JvmOverloads constructor(context: Context,
         val defStrokeWidthPx = (defStrokeWidthDp * resources.displayMetrics.density).toFloat()
         strokeWidth = a.getDimension(R.styleable.ColorCircleView_strokeWidth, defStrokeWidthPx)
 
-        strokeColorRes = a.getResourceId(R.styleable.ColorCircleView_strokeColor, R.color.text_secondary)
+        strokeColorRes = a.getResourceId(
+            R.styleable.ColorCircleView_strokeColor,
+            R.color.text_secondary
+        )
         a.recycle()
     }
 
@@ -83,8 +88,9 @@ class ColorCircleView @JvmOverloads constructor(context: Context,
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        canvas.drawCircle(center.first, center.second, radius, strokePaint)
-        canvas.drawCircle(center.first, center.second, radius - strokeWidth, fillPaint)
+        canvas.drawRoundRect(center.first-radius, center.first-radius,
+            center.first+radius, center.first+radius,
+            15F, 15F, fillPaint)
     }
 
 

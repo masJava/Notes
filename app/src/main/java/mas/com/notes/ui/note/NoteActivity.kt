@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
-class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteData>() {
 
     companion object {
         private val EXTRA_NOTE = NoteActivity::class.java.name + "extra.NOTE"
@@ -78,7 +78,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         return colorList[Random.nextInt(colorList.size)]
     }
 
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: NoteData) {
         if(data.isDeleted) finish()
         this.note = data.note
         initView()
@@ -161,11 +161,6 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         else -> super.onOptionsItemSelected(item)
     }
 
-//    fun colorChange(item: MenuItem) {
-//        colorNote = getNextColor(colorList)
-//        toolbar.setBackgroundColor(getColor(convertColor(colorNote)))
-//        saveNote()
-//    }
 
     private fun getNextColor(colorList: List<Color>): Color {
         for (i in colorList.indices) {
@@ -180,10 +175,10 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
     private fun deleteNote() {
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.note_del_message))
-            .setPositiveButton(R.string.note_del_ok) { dialog, which ->
+            .setPositiveButton(R.string.note_del_ok) { _, _ ->
                 viewModel.deleteNote()
                 onBackPressed() }
-            .setNegativeButton(R.string.note_del_cancel) { dialog, which -> dialog.dismiss() }
+            .setNegativeButton(R.string.note_del_cancel) { dialog, _ -> dialog.dismiss() }
             .show()
     }
 }
